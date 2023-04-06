@@ -18,7 +18,7 @@ This script relies on a couple things:
 ## How to use
 Download this repository and unzip it anywhere on your disk. Open a command line in the unzipped folder and type:
 ```bash
-python mpv_twitch_chat_replay.py
+python mpv_chat_replay.py
 ```
 You will be prompted to enter the path to the video to play, the chat log file to scan alongside the video and the year when logging started for that log file.
 mpv will then start and the command line will display chat lines as the video plays or as you scrub through it.
