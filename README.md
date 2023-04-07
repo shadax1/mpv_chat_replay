@@ -1,4 +1,4 @@
-# mpv_twitch_chat_replay
+# mpv_chat_replay
 ### Apr 20th 2022
 Python script that replays a livestream chat alongside a local video playing in [mpv](https://mpv.io/).
 
