@@ -107,8 +107,10 @@ def get_chat_lines(video_start_time, video_end_time, log_path, log_year):
 
 def get_video_duration(video_path):
     #this will return a bunch of metadata related to the video file
-    result = subprocess.check_output(fr'ffprobe -v quiet -show_streams -select_streams v:0 -of json "{video_path}"',shell=True).decode()
-    fields = json.loads(result)['streams'][0]
+    ffprobe_cmd = f"ffprobe -v quiet -show_format -show_streams -print_format json '{video_path}'"
+    result = subprocess.run([ffprobe_cmd], shell=True, capture_output=True, text=True)
+    #result = subprocess.check_output(fr'ffprobe -v quiet -show_streams -select_streams v:0 -of json "{video_path}"',shell=True).decode()
+    fields = json.loads(result.stdout)['streams'][0]
     video_duration = fields['duration'] #only need the duration (stored as float in seconds)
     return video_duration
 
