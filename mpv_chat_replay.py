@@ -1,8 +1,13 @@
 import os
-from datetime import datetime, timedelta
 import re
-import subprocess, json
-os.environ["PATH"] = os.path.dirname(__file__) + os.pathsep + os.environ["PATH"]
+import json
+import subprocess
+from datetime import datetime, timedelta
+
+if os.name == 'nt':
+    print(os.environ["PATH"])
+    os.environ["PATH"] = os.path.dirname(__file__) + os.pathsep + os.environ["PATH"]
+    print(os.environ["PATH"])
 import mpv #https://github.com/jaseg/python-mpv
 
 def get_chat_lines(video_start_time, video_end_time, log_path, log_year):
@@ -107,10 +112,10 @@ def get_chat_lines(video_start_time, video_end_time, log_path, log_year):
 
 def get_video_duration(video_path):
     #this will return a bunch of metadata related to the video file
-    ffprobe_cmd = f"ffprobe -v quiet -show_format -show_streams -print_format json '{video_path}'"
-    result = subprocess.run([ffprobe_cmd], shell=True, capture_output=True, text=True)
-    #result = subprocess.check_output(fr'ffprobe -v quiet -show_streams -select_streams v:0 -of json "{video_path}"',shell=True).decode()
-    fields = json.loads(result.stdout)['streams'][0]
+    ffprobe_cmd = f'ffprobe -v quiet -show_format -show_streams -print_format json "{video_path}"'
+    result = subprocess.run(fr'{ffprobe_cmd}', shell=True, capture_output=True)
+    json_result = result.stdout
+    fields = json.loads(json_result)['streams'][0]
     video_duration = fields['duration'] #only need the duration (stored as float in seconds)
     return video_duration
 
@@ -183,8 +188,9 @@ if __name__ == "__main__": #if ran as a script
             # Here, value is either None if nothing is playing or a float containing
             # fractional seconds since the beginning of the file.
             #print('Now playing at {:.2f}s'.format(value))
-            mpv_time = int(value)
-            show_chat(mpv_time, dict_chat, video_start_time)
+            if value != None:
+                mpv_time = int(value)
+                show_chat(mpv_time, dict_chat, video_start_time)
         
         os.system('cls||clear')
         player.play(video_path)
@@ -192,7 +198,3 @@ if __name__ == "__main__": #if ran as a script
         del player
     else:
         print("[SCRIPT] There is no chat for that video")
-
-#get ffprobe build from https://github.com/BtbN/FFmpeg-Builds/releases
-#mpv-1.dll can be found here https://sourceforge.net/projects/mpv-player-windows/files/libmpv/mpv-dev-x86_64-20210801-git-416668d.7z/download
-#must add that to the script folder
