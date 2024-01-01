@@ -1,4 +1,6 @@
 import os
+import sys
+import json
 import re
 import json
 import subprocess
@@ -9,6 +11,8 @@ if os.name == 'nt':
     os.environ["PATH"] = os.path.dirname(__file__) + os.pathsep + os.environ["PATH"]
     print(os.environ["PATH"])
 import mpv #https://github.com/jaseg/python-mpv
+
+script_path = os.getcwd() #path to script's directory
 
 def get_chat_lines(video_start_time, video_end_time, log_path, log_year):
     line_count = 0
@@ -149,8 +153,7 @@ def show_chat(mpv_time, dict_chat, video_start_time):
     mpv_time_old = mpv_time
 
 if __name__ == "__main__": #if ran as a script
-    print("Enter the path to the video to play:")
-    video_path = input()
+    video_path = sys.argv[1] #path to video passed as an argument
 
     temp = video_path.split("-")
     year = int(temp[0][-4:])
@@ -162,13 +165,11 @@ if __name__ == "__main__": #if ran as a script
 
     video_start_time = datetime(year=int(year), month=int(month), day=int(day), hour=int(hour), minute=int(minute), second=int(second))
 
-    #get the path to the chat log file
-    print("Enter the path to the chat log:")
-    log_path = input()
-
-    #get the year for when chat logging started from the user
-    print("Enter the year for when logging started:")
-    log_year = int(input())
+    #get info from json file
+    with open(f"{script_path}{os.path.sep}config.json", encoding="utf8") as f:
+        parsed_json = json.load(f)
+        log_path = parsed_json['log_path']
+        log_year = parsed_json['log_year_start']
 
     video_duration = get_video_duration(video_path)
     video_duration = float(video_duration)
