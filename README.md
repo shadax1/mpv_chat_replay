@@ -25,9 +25,18 @@ This script relies on a couple things:
 + The year when logging started for the given log file
 
 ## How to use
-Download this repository and unzip it anywhere on your disk. Open the `config.json` file and add the path to the chat log as well as the year when logging started for that log file in the appropriate fields. After that, open a command line to run the script with the path to the video file as an argument:
+Download this repository and unzip it anywhere on your disk. Open the `config.json` file and add the path to the chat log as well as the year when logging started for that log file in the appropriate fields like this:
+```json
+{
+    "log_path":"/home/user/chatlog.txt",
+    "log_year_start":2016
+}
+```
+**Note:** for Windows paths, use escape characters for backslashes like this for instance `C:\\Users\\user\\chatlog.txt`
+
+After that, open a command line to run the script with the path to the video file as an argument:
 ```bash
-python mpv_chat_replay.py /home/user/2017-03-10_22-57-54.mp4
+python mpv_chat_replay.py '/home/user/2017-03-10_22-57-54.mp4'
 ```
 > In this case, the argument is the following video file path `/home/user/2017-03-10_22-57-54.mp4`.
 
